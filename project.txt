@@ -23,6 +23,8 @@ Interpret ruleset into creator
 Create a series of functions that link together to generate the data from as little user input as possible
 Output the details to a list detailing name, assets, special rules
 
+output to a csv and or html file
+
 MVP eta 2 weeks
 MVP+(Map) 2 Additional weeks
 
