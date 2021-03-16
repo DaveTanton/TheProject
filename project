@@ -1,0 +1,34 @@
+Armada campaign Generator
+
+Goal of the Project 
+A Python programme that creates a campaign environment for group play for the Starwars Armada series of games.  
+Audience 
+
+For group of Players of Star Wars Armada seeking a more random campaign environment  
+
+Minimum Viable Product (MVP) 
+A text printout in a list format of campaign details and resources
+
+Technology Choices 
+The MVP can be done entirely in core Python – no special libraries needed. Could expand MVP(MVP+) time permitting to include a generated map from the campaign details 
+Risks 
+
+The official campaigns (The Corellian Conflict and Rebellion in the Rim) have no published rulesets and will have to be reversed engineered from these sets to create a ruleset as a guide 
+The product will be niche and will encounter problems in testing the creation tool. To overcome this I would make available a beta copy once MVP+ is achieved(pillow, matplotlib to be research)
+
+Task List 
+Create a paper ruleset from the current campaign products as a basis for the creator
+Interpret ruleset into creator 
+
+Create a series of functions that link together to generate the data from as little user input as possible
+Output the details to a list detailing name, assets, special rules
+
+MVP eta 2 weeks
+MVP+(Map) 2 Additional weeks
+
+Extensions 
+Use Lists(possible DB) to allow creation of areas based in the Starwars universe 
+Implement map from data created from ruleset 
+A means to save/load/print generated campaign environments
+Allow user to rename certain assets as required
+A GUI to make the game more attractive. 
