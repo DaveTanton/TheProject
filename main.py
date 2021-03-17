@@ -4,6 +4,19 @@ def randomRoll(min,max):
     num = random.randint(min,max)
     return num
 
+def bonusVictoryPoints():
+    num=randomRoll(0,2)
+    return num
+
+def mapPosition ():
+    #posistions are placeholder based on a 10x10 grid fo the moment
+    position =[]
+    xpos=randomRoll(0,10)
+    position.append(xpos)
+    ypos=randomRoll(0,10)
+    position.append(ypos)
+    return position
+
 def planetNames(regionNum,numOfPlanets):
     nameList=[]
     planetList=[]
@@ -51,5 +64,25 @@ else:
 
 numOfPlayers = int(input(" number of players between 2 and 8: "))
 numOfPlanets = int((numOfPlayers)+1) #true formula (numofplayer*4)+1)
+tradeRouts = 0 #placeholder var
+
 print("\nsector name:",campaignName, "\nRegion:",region,"\nNumber of players:",numOfPlayers,"\nPlanets to generate:",numOfPlanets)
-print(planetNames(regionNum,numOfPlanets))
+tmpList=planetNames(regionNum,numOfPlanets)
+
+#streamline the for loop below
+for item in tmpList:
+    planetList=[]
+    for item in range(0,len(tmpList)):
+        planetList.append({
+            "id":item+1,
+            "name":tmpList[item],
+            "vp":bonusVictoryPoints(),
+            "location rewards": "place holder list of 2 max",
+            "Strategic objectives": "place holder list of 2 max",
+            "Standard Objectives": "place holderlist of 2 max",
+            "Campaign Objectives": "place holder list of 2 max",
+            "map position": mapPosition()
+        })
+
+for item in planetList:
+    print(item)
