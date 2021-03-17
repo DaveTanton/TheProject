@@ -1,5 +1,9 @@
 #option selection
 import random
+def randomRoll(min,max):
+    num = random.randint(min,max)
+    return num
+
 def planetNames(regionNum,numOfPlanets):
     nameList=[]
     planetList=[]
@@ -15,9 +19,9 @@ def planetNames(regionNum,numOfPlanets):
         nameList = ["Pijal","Quarzite","Riosa","Sergia","Taanab","Telerath","Throffdon","Ubduria","Vurdon Ka","Xibariz"]
 
     while count<=(numOfPlanets)-1:
-        name = nameList[random.randint(0, len(nameList) - 1)]
+        name = nameList[randomRoll(0, len(nameList) - 1)]
         if name in planetList:
-            name = nameList[random.randint(0, len(nameList) - 1)]
+            name = nameList[randomRoll(0, len(nameList) - 1)]
         else:
             planetList.append(name)
             count+=1
