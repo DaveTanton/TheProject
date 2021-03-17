@@ -7,11 +7,11 @@ def planetNames(regionNum,numOfPlanets):
     count=0
     if regionNum == 1:
         nameList = ["Ambria","Amethia Prime","Antar","Arreyel","Bastatha","Bernilla","Bestine IV","Birren","Calcoraan","Chaaktil"]
-    elif regionNum == 2:
+    if regionNum == 2:
         nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
-    elif regionNum == 3:
+    if regionNum == 3:
         nameList = ["Kooriva","Li-Toran","Manaan","Navlaas","Obroa-skai","Onderon","Orchis","Pasher","Phateem","Pheryon"]
-    else:
+    if regionNum == 4:
         nameList = ["Pijal","Quarzite","Riosa","Sergia","Taanab","Telerath","Throffdon","Ubduria","Vurdon Ka","Xibariz"]
 
     while count<=(numOfPlanets)-1:
