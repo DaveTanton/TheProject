@@ -13,10 +13,24 @@ def planetNames(regionNum,numOfPlanets):
     planetList=[]
     name=""
     count=0
+    #core worlds version one bit list
     if regionNum == 1:
-        nameList = ["Ambria","Amethia Prime","Antar","Arreyel","Bastatha","Bernilla","Bestine IV","Birren","Calcoraan","Chaaktil"]
+        #fh=open("coreworlds.txt")
+        #for name in fh:
+        #    name=name.strip()
+        #    nameList.append(name)
+        nameList = ["Abregado-rae","Alsakan","Anaxes","Athulla","Balosar","Bar'leth","Botor","Brentaal IV","Cardota",
+            "Cavas","Chandrila","Corellia","Corulag","Coruscant","Courtsilius","Davnar II","Dowut","Duro","Fedalle",
+            "Ganthel","Gatalenta","Grizmallt","Harloff Minor","Hosnian Prime","Humbarine","Kuat","Lanz Carpo","Lespectus",
+            "Metellos","N'Zoth","Neral","Pillio","Plexis","Ralltiir","Raysho","Salliche","Selonia","Sissubo","Skako",
+            "Talus","Tangenine","Tepasi","Tinnel IV","Tralus","Vardos"]
+    #inner rim version two file import and convert to list
     if regionNum == 2:
-        nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
+        fh=open("innerrim.txt")
+        for name in fh:
+            name=name.strip()
+            nameList.append(name)
+        #nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
     if regionNum == 3:
         nameList = ["Kooriva","Li-Toran","Manaan","Navlaas","Obroa-skai","Onderon","Orchis","Pasher","Phateem","Pheryon"]
     if regionNum == 4:
@@ -47,32 +61,31 @@ def mapPosition ():
 def startegicObj():
     objectives = randomRoll(0, 2)
     lst = []
-    stdObj = ["Resources", "Skilled Spacers", "Repair Yards", "Spynet", "Destiny"]
+    lstObj = ["Resources", "Skilled Spacers", "Repair Yards", "Spynet", "Destiny"]
     for item in range(0, objectives):
-        lst.append(stdObj[randomRoll(0, len(stdObj) - 1)])
+        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
     return lst
 
 def standardObj():
     objectives = randomRoll(0,2)
     lst=[]
-    stdObj =["Advanced Gunnery","Dangerous Terriorty","Rift Assualt","Rift Ambush","opening Salvo"]
+    lstObj =["Advanced Gunnery","Dangerous Terriorty","Rift Assualt","Rift Ambush","opening Salvo"]
     for item in range(0,objectives):
-        lst.append(stdObj[randomRoll(0,len(stdObj)-1)])
+        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
     return lst
 
 def campaignObj():
     objectives = randomRoll(0, 2)
     lst = []
-    stdObj = ["Pilot Defection","Recruit allies","Steal supplies","Hired Scum","Double Agent"]
+    lstObj = ["Pilot Defection","Recruit allies","Steal supplies","Hired Scum","Double Agent"]
     for item in range(0, objectives):
-        lst.append(stdObj[randomRoll(0, len(stdObj) - 1)])
+        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
     return lst
 
 def locRewards():
     return False
 
-#***** validators *****
-
+###### validators ######
 def inputCheck(message):
   while True:
     try:
@@ -85,15 +98,15 @@ def inputCheck(message):
     except:
       message ='You must enter a valid number : '
 
-#***** main body *****
+###### main body #######
 campaignName = input("sector name : ")
 regionNum = 0
-region = input(" which region is the campaign to be set in?\n"
+region = int(input(" which region is the campaign to be set in?\n"
                "1. Core Worlds\n"
                "2. Inner Rim\n"
                "3. Mid Rim\n"
                "4. Outer Territories\n"
-               "\tchoose option 1 to 4:")
+               "\tchoose option 1 to 4:"))
 if region == 1:
     region = "Core Worlds"
     regionNum = 1
@@ -129,5 +142,6 @@ for item in tmpList:
             "map position": mapPosition()
         })
 
-for entry in planetList:
-    print(entry)
+for entery in planetList:
+    print(entery)
+
