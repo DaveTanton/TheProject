@@ -1,5 +1,7 @@
-Resources
-Skilled Spacers
-Repair Yards
-Spynet
+Repair yards
+SpyNet
 Destiny
+Ally
+Diplomats 
+Skilled Spacers
+Resources
