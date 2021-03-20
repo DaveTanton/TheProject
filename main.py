@@ -1,8 +1,8 @@
 import random
 
 #20/03/2021 TODO
-# add data for objective cards
-# create the local rewards function
+# add data for objective cards ooo done via textfiles
+# create the local rewards function ooo basic version working
 # start on asset creator function
 # start validation
 
@@ -32,6 +32,7 @@ def planetNames(regionNum,numOfPlanets):
         for name in fh:
             name=name.strip()
             nameList.append(name)
+        fh.close()
         #nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
     #midrim code ver 3
     if regionNum == 3:
@@ -61,6 +62,7 @@ def fileLoader(filename):
     for name in fh:
         name = name.strip()
         filenameList.append(name)
+    fh.close()
     return filenameList
 
 def mapPosition ():
@@ -72,18 +74,53 @@ def mapPosition ():
     position.append(ypos)
     return position
 
-def objectiveLoader(filename):
-    objectives = randomRoll(0, 2)
+def objectiveLoader(filename,min,max):
+    objectives = randomRoll(min, max)
     lst = []
     lstObj = fileLoader(filename)
-    #test list
-    # ["Resources", "Skilled Spacers", "Repair Yards", "Spynet", "Destiny"]
     for item in range(0, objectives):
         lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
     return lst
 
 def locRewards():
-    return False
+    filename="temptest.txt"
+    lr=randomRoll(1,2)
+    #works not elegant
+    diceroll = randomRoll(1,5)
+    value =""
+    if diceroll ==1:
+        value="8/4"
+    if diceroll == 2:
+        value = "10/5"
+    if diceroll ==3:
+        value = "12/6"
+    if diceroll ==4:
+        value = "24/12"
+    if diceroll ==5:
+        value = "30/15"
+    lst =[]
+    lstObj = fileLoader(filename)
+    for item in range(0, lr):
+        lst.append({lstObj[randomRoll(0, len(lstObj) - 1)]:value})
+   
+#1-2
+# values fixed based on card 8,10,12,,24,30
+#intial values are halfed
+# listed upgrades:
+# Offensive Retrofit 10/5
+# Defensive Retrofit 10/5
+# Support Team 10/5 8/4
+# Officer 8/4 10/51
+# Title 10/5 12/6 8/4
+# Ordnance 10/5 12/6
+# Fleet Command 8/4
+# Ion Cannons 8/4 10/5
+# Turbolasers 10/5
+# Experimental Retrofits 8/4
+# Squadron24/12 30/15
+# Weapons Team 10/5
+# Fleet Support 8/4
+    return lst
 
 ###### validators ######
 def inputCheck(message):
@@ -136,15 +173,11 @@ for item in tmpList:
             "name":tmpList[item],
             "vp":bonusVictoryPoints(),
             "location rewards": locRewards(),
-            "Standard Objectives cards": objectiveLoader("standardObjectives.txt"),
-            "Campaign Objectives": objectiveLoader("campaignObjectives.txt"),
-            "Strategic objectives": objectiveLoader("standardObjectives.txt"),
+            "Standard Objectives cards":  objectiveLoader("standardObjectives.txt",0,2),
+            "Campaign Objectives": objectiveLoader("campaignObjectives.txt",0,2),
+            "Strategic objectives":  objectiveLoader("strategicObjectives.txt",0,2),
             "map position": mapPosition()
         })
 
 for entry in planetList:
     print(entry)
-
-
-
-
