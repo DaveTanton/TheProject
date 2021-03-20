@@ -1,5 +1,11 @@
 import random
 
+#20/03/2021 TODO
+# add data for objective cards
+# create the local rewards function
+# start on asset creator function
+# start validation
+
 def randomRoll(min,max):
     num = random.randint(min,max)
     return num
@@ -13,26 +19,25 @@ def planetNames(regionNum,numOfPlanets):
     planetList=[]
     name=""
     count=0
-    #core worlds version one bit list
+    #core worlds code ver1
     if regionNum == 1:
-        #fh=open("coreworlds.txt")
-        #for name in fh:
-        #    name=name.strip()
-        #    nameList.append(name)
-        nameList = ["Abregado-rae","Alsakan","Anaxes","Athulla","Balosar","Bar'leth","Botor","Brentaal IV","Cardota",
+       nameList = ["Abregado-rae","Alsakan","Anaxes","Athulla","Balosar","Bar'leth","Botor","Brentaal IV","Cardota",
             "Cavas","Chandrila","Corellia","Corulag","Coruscant","Courtsilius","Davnar II","Dowut","Duro","Fedalle",
             "Ganthel","Gatalenta","Grizmallt","Harloff Minor","Hosnian Prime","Humbarine","Kuat","Lanz Carpo","Lespectus",
             "Metellos","N'Zoth","Neral","Pillio","Plexis","Ralltiir","Raysho","Salliche","Selonia","Sissubo","Skako",
             "Talus","Tangenine","Tepasi","Tinnel IV","Tralus","Vardos"]
-    #inner rim version two file import and convert to list
+    #inner rim code ver 2
     if regionNum == 2:
         fh=open("innerrim.txt")
         for name in fh:
             name=name.strip()
             nameList.append(name)
         #nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
+    #midrim code ver 3
     if regionNum == 3:
-        nameList = ["Kooriva","Li-Toran","Manaan","Navlaas","Obroa-skai","Onderon","Orchis","Pasher","Phateem","Pheryon"]
+        nameList = fileLoader("midrim.txt")
+        #["Kooriva","Li-Toran","Manaan","Navlaas","Obroa-skai","Onderon","Orchis","Pasher","Phateem","Pheryon"]
+    #outer rim test version
     if regionNum == 4:
         nameList = ["Pijal","Quarzite","Riosa","Sergia","Taanab","Telerath","Throffdon","Ubduria","Vurdon Ka","Xibariz"]
 
@@ -49,6 +54,15 @@ def bonusVictoryPoints():
     num=randomRoll(0,2)
     return num
 
+def fileLoader(filename):
+    #finds the file. loads it strips the whitespace and outputs a s a basic list
+    filenameList =[]
+    fh = open(filename)
+    for name in fh:
+        name = name.strip()
+        filenameList.append(name)
+    return filenameList
+
 def mapPosition ():
     #posistions are placeholder based on a 10x10 grid fo the moment
     position =[]
@@ -58,26 +72,12 @@ def mapPosition ():
     position.append(ypos)
     return position
 
-def startegicObj():
+def objectiveLoader(filename):
     objectives = randomRoll(0, 2)
     lst = []
-    lstObj = ["Resources", "Skilled Spacers", "Repair Yards", "Spynet", "Destiny"]
-    for item in range(0, objectives):
-        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
-    return lst
-
-def standardObj():
-    objectives = randomRoll(0,2)
-    lst=[]
-    lstObj =["Advanced Gunnery","Dangerous Terriorty","Rift Assualt","Rift Ambush","opening Salvo"]
-    for item in range(0,objectives):
-        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
-    return lst
-
-def campaignObj():
-    objectives = randomRoll(0, 2)
-    lst = []
-    lstObj = ["Pilot Defection","Recruit allies","Steal supplies","Hired Scum","Double Agent"]
+    lstObj = fileLoader(filename)
+    #test list
+    # ["Resources", "Skilled Spacers", "Repair Yards", "Spynet", "Destiny"]
     for item in range(0, objectives):
         lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
     return lst
@@ -136,12 +136,15 @@ for item in tmpList:
             "name":tmpList[item],
             "vp":bonusVictoryPoints(),
             "location rewards": locRewards(),
-            "Standard Objectives cards": standardObj(),
-            "Campaign Objectives": campaignObj(),
-            "Strategic objectives": startegicObj(),
+            "Standard Objectives cards": objectiveLoader("standardObjectives.txt"),
+            "Campaign Objectives": objectiveLoader("campaignObjectives.txt"),
+            "Strategic objectives": objectiveLoader("standardObjectives.txt"),
             "map position": mapPosition()
         })
 
-for entery in planetList:
-    print(entery)
+for entry in planetList:
+    print(entry)
+
+
+
 
