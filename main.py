@@ -1,17 +1,42 @@
 import random
-
+import math
 #20/03/2021 TODO
 # add data for objective cards ooo done via textfiles
 # create the local rewards function ooo basic version working
-# start on asset creator function
+# start on asset creator function OOO
 # start validation
+# start creating modules
+# breakdown of fleet assets per player OOO
+# output to csv
+# output to html
+#reroll with same values'
+#reroll with new values
 
 def randomRoll(min,max):
     num = random.randint(min,max)
     return num
 
-def assetCreator():
-    return False
+def assetCreator(regionNum,numOfPlanets):
+    #this function creats the planets ensure each plaent is unique and assigns values and assets randomly to each.
+    #retuns the results as a list
+    tmpList = planetNames(regionNum, numOfPlanets)
+    planetList =[]
+    # streamline the for loop below?
+    for item in tmpList:
+        planetList = []
+        for item in range(0, len(tmpList)):
+            planetList.append(item + 1)
+            planetList.append({
+                "name": tmpList[item],  # tmp list holds the planet data before moving it here
+                "vp": bonusVictoryPoints(),
+                "location rewards": locRewards(),
+                "Standard Objectives cards": objectiveLoader("standardObjectives.txt", 0, 2),
+                "Campaign Objectives": objectiveLoader("campaignObjectives.txt", 0, 2),
+                "Strategic objectives": objectiveLoader("strategicObjectives.txt", 0, 2),
+                "map position": mapPosition()
+            })
+
+    return planetList
 
 def planetNames(regionNum,numOfPlanets):
     #names to be expanded to 100 per region
@@ -102,7 +127,7 @@ def locRewards():
     lstObj = fileLoader(filename)
     for item in range(0, lr):
         lst.append({lstObj[randomRoll(0, len(lstObj) - 1)]:value})
-   
+
 #1-2
 # values fixed based on card 8,10,12,,24,30
 #intial values are halfed
@@ -122,28 +147,64 @@ def locRewards():
 # Fleet Support 8/4
     return lst
 
+def fleetBreakdown(fleetSize):
+    fighter = math.ceil(fleetSize / 3)
+    ship =  fleetSize - fighter
+    print("fleetsize : ",fleetSize)
+    print("Maximum points spent on ships : ", ship)
+    print("Maximum points spent on fighters : ", fighter)
+
+
 ###### validators ######
-def inputCheck(message):
+def regionCheck(message):
   while True:
     try:
       message = int(input(message))
-      if message<= 0:
-        message ='You must enter a valid number : '
+      if message <= 0 or message >4:
+        message ='You must enter a valid number only : '
         continue
+
       else:
         return message
     except:
-      message ='You must enter a valid number : '
+      message ='You must enter a valid number only : '
+
+def playerCheck():
+    while True:
+        try:
+            message = int(input(message))
+            if message <2 or message > 8:
+                message = 'You must enter a valid number only : '
+                continue
+
+            else:
+                return message
+        except:
+            message = 'You must enter a valid number only : '
+
+def fleetCheck():
+    while True:
+        try:
+            message = int(input(message))
+            if message <0:
+                message = 'You must enter a valid number only : '
+                continue
+
+            else:
+                return message
+        except:
+            message = 'You must enter a valid number only : '
+
 
 ###### main body #######
 campaignName = input("sector name : ")
 regionNum = 0
-region = int(input(" which region is the campaign to be set in?\n"
+region = regionCheck(" which region is the campaign to be set in?\n"
                "1. Core Worlds\n"
                "2. Inner Rim\n"
                "3. Mid Rim\n"
                "4. Outer Territories\n"
-               "\tchoose option 1 to 4:"))
+               "\tchoose option 1 to 4:")
 if region == 1:
     region = "Core Worlds"
     regionNum = 1
@@ -157,27 +218,13 @@ else:
     region = "outer Territories"
     regionNum = 4
 
-numOfPlayers = input(" number of players between 2 and 8: ")
-numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*4)+1)
-tradeRouts = 0 #placeholder var
-
+numOfPlayers = playerCheck(" number of players between 2 and 10: ")
+numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)
+tradeRouts = 0 #placeholder var not yet in use
+fleetSize = fleetCheck("size of each players fleet? (200 recommended) :")
 print("\nsector name:",campaignName, "\nRegion:",region,"\nNumber of players:",numOfPlayers,"\nPlanets to generate:",numOfPlanets)
-tmpList=planetNames(regionNum,numOfPlanets)
+print(fleetBreakdown(fleetSize))
+assets = assetCreator(regionNum,numOfPlanets)
 
-#streamline the for loop below
-for item in tmpList:
-    planetList=[]
-    for item in range(0,len(tmpList)):
-        planetList.append(item+1)
-        planetList.append({
-            "name":tmpList[item],
-            "vp":bonusVictoryPoints(),
-            "location rewards": locRewards(),
-            "Standard Objectives cards":  objectiveLoader("standardObjectives.txt",0,2),
-            "Campaign Objectives": objectiveLoader("campaignObjectives.txt",0,2),
-            "Strategic objectives":  objectiveLoader("strategicObjectives.txt",0,2),
-            "map position": mapPosition()
-        })
-
-for entry in planetList:
+for entry in assets:
     print(entry)
