@@ -1,16 +1,19 @@
 import random
 import math
-#20/03/2021 TODO
+import csv
+
+#26/03/2021 TODO
 # add data for objective cards ooo done via textfiles
 # create the local rewards function ooo basic version working
 # start on asset creator function OOO
 # start validation
 # start creating modules
 # breakdown of fleet assets per player OOO
-# output to csv
+# output to csv 000 completed
 # output to html
-#reroll with same values'
-#reroll with new values
+# reroll with same values'
+# reroll with new values
+# look into converting over to json
 
 def randomRoll(min,max):
     num = random.randint(min,max)
@@ -169,7 +172,7 @@ def regionCheck(message):
     except:
       message ='You must enter a valid number only : '
 
-def playerCheck():
+def playerCheck(message):
     while True:
         try:
             message = int(input(message))
@@ -182,7 +185,7 @@ def playerCheck():
         except:
             message = 'You must enter a valid number only : '
 
-def fleetCheck():
+def fleetCheck(message):
     while True:
         try:
             message = int(input(message))
@@ -220,11 +223,27 @@ else:
 
 numOfPlayers = playerCheck(" number of players between 2 and 10: ")
 numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)
-tradeRouts = 0 #placeholder var not yet in use
+tradeRoutes = 0 #placeholder var not yet in use
 fleetSize = fleetCheck("size of each players fleet? (200 recommended) :")
+
 print("\nsector name:",campaignName, "\nRegion:",region,"\nNumber of players:",numOfPlayers,"\nPlanets to generate:",numOfPlanets)
 print(fleetBreakdown(fleetSize))
-assets = assetCreator(regionNum,numOfPlanets)
-
-for entry in assets:
+planetAssets = assetCreator(regionNum,numOfPlanets)
+for entry in planetAssets:
     print(entry)
+
+#csv save function
+
+writeCSV=input("save as a csv Y/N? ").lower()
+
+if writeCSV=="y":
+    with open('planetassets.csv', 'w',newline="") as f:
+        assetWriter = csv.writer(f)
+        assetWriter.writerow(["sector name :",campaignName])
+        assetWriter.writerow(("number of players :",numOfPlayers))
+        assetWriter.writerow(["Region :", region])
+        assetWriter.writerow(["number of planets :",numOfPlanets])
+        assetWriter.writerow((["trade routes :",tradeRoutes]))
+        assetWriter.writerow(["Fleet Size :",fleetSize])
+        for item in (planetAssets):
+            assetWriter.writerow([item])
