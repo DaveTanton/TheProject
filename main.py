@@ -1,7 +1,6 @@
 import random
 import math
 import csv
-
 #26/03/2021 TODO
 # add data for objective cards ooo done via textfiles
 # create the local rewards function ooo basic version working
@@ -14,6 +13,7 @@ import csv
 # reroll with same values'
 # reroll with new values
 # look into converting over to json
+# strip co ord out of asset creator and have it in its own function
 
 def randomRoll(min,max):
     num = random.randint(min,max)
@@ -28,15 +28,14 @@ def assetCreator(regionNum,numOfPlanets):
     for item in tmpList:
         planetList = []
         for item in range(0, len(tmpList)):
-            planetList.append(item + 1)
             planetList.append({
                 "name": tmpList[item],  # tmp list holds the planet data before moving it here
                 "vp": bonusVictoryPoints(),
                 "location rewards": locRewards(),
                 "Standard Objectives cards": objectiveLoader("standardObjectives.txt", 0, 2),
                 "Campaign Objectives": objectiveLoader("campaignObjectives.txt", 0, 2),
-                "Strategic objectives": objectiveLoader("strategicObjectives.txt", 0, 2),
-                "map position": mapPosition()
+                "Strategic objectives": objectiveLoader("strategicObjectives.txt", 0, 2)
+               # "map position": mapPosition()
             })
 
     return planetList
@@ -93,7 +92,7 @@ def fileLoader(filename):
     fh.close()
     return filenameList
 
-def mapPosition ():
+def mapCoOrd ():
     #posistions are placeholder based on a 10x10 grid fo the moment
     position =[]
     xpos=randomRoll(0,10)
@@ -157,7 +156,6 @@ def fleetBreakdown(fleetSize):
     print("Maximum points spent on ships : ", ship)
     print("Maximum points spent on fighters : ", fighter)
 
-
 ###### validators ######
 def regionCheck(message):
   while True:
@@ -198,8 +196,22 @@ def fleetCheck(message):
         except:
             message = 'You must enter a valid number only : '
 
+def mapPosition(planetList,numOfPlanets):
+    count = 0
+    mapPos =[]
+    for each in range(numOfPlanets):
+        while count<=(numOfPlanets)-1:
+            coOrd = mapCoOrd()
+            if coOrd in mapPos:
+                coOrd = mapCoOrd()
+            else:
+                mapPos.append(coOrd)
+                count+=1
+    newLst = zip(planetList,mapPos)
 
-###### main body #######
+    return newLst
+
+ ###### main body #######
 campaignName = input("sector name : ")
 regionNum = 0
 region = regionCheck(" which region is the campaign to be set in?\n"
@@ -221,7 +233,7 @@ else:
     region = "outer Territories"
     regionNum = 4
 
-numOfPlayers = playerCheck(" number of players between 2 and 10: ")
+numOfPlayers = playerCheck(" number of players between 2 and 8: ")
 numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)
 tradeRoutes = 0 #placeholder var not yet in use
 fleetSize = fleetCheck("size of each players fleet? (200 recommended) :")
@@ -229,10 +241,32 @@ fleetSize = fleetCheck("size of each players fleet? (200 recommended) :")
 print("\nsector name:",campaignName, "\nRegion:",region,"\nNumber of players:",numOfPlayers,"\nPlanets to generate:",numOfPlanets)
 print(fleetBreakdown(fleetSize))
 planetAssets = assetCreator(regionNum,numOfPlanets)
-for entry in planetAssets:
+assetLst = mapPosition(planetAssets,numOfPlanets)
+for entry in assetLst:
     print(entry)
 
-#csv save function
+print()
+
+while True:
+    rewritemapCoord = input("change map positions Y/N? ").lower()
+    if rewritemapCoord =="y":
+        assetLst = mapPosition(planetAssets,numOfPlanets)
+        for entry in assetLst:
+            print(entry)
+    else:
+        break
+print()
+
+while True:
+    resetPlanets = input("reset planets Y/N ?").lower()
+    if resetPlanets == "y":
+        planetAssets = assetCreator(regionNum, numOfPlanets)
+        assetLst = mapPosition(planetAssets, numOfPlanets)
+        for entry in assetLst:
+            print(entry)
+    else:
+        break
+print()
 
 writeCSV=input("save as a csv Y/N? ").lower()
 
