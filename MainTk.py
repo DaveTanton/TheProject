@@ -1,73 +1,59 @@
 import random
 import math
 import csv
-import tkinter as tk
+import SWACG
 from tkinter import *
+from tkinter import ttk
 from PIL import ImageTk,Image
 
-def randomRoll(min,max):
-    num = random.randint(min,max)
-    return num
+#use frames for general area the grids inside the frames for prescion
+#lession 11 and lesson 46 ,64
+#exe files lesson 40
+def clear():
+   region_name_box.delete(0,END)
+   players_box.delete(0,END)
 
-SWACG = tk.Tk()
-SWACG.title("SWACG")
-SWACG.geometry("1500x1000")
+def clear_name():
+   sector_name_box.delete(0,END)
 
-tfm = Frame(SWACG)
+def rolls():
+   sector = sector_name_box.get()
+   region=int(region_name_box.get())
+   planets=int(players_box.get())+1
 
-topFrame1 = Frame(tfm, bg="red", width="300",height="200")
-# logo/title
-topFrame1.pack(side ="left")
+   planetAssets=SWACG.assetCreator(region,planets)
+   assetLst = SWACG.mapPosition(planetAssets, planets)
 
-topFrame2 = Frame(tfm, bg="blue", width="300",height="200")
-# spacer
-topFrame2.pack(side ="left")
+   sector_name_output = Label(myWin,text=sector)
+   sector_name_output.grid(row=5,column=0)
+   for i in range(len(assetLst)):
+      output = Label(myWin, text=assetLst[i])
+      output.grid(row=6+i,column=0,sticky=W)
 
-topFrame3 = Frame(tfm, bg="green", width="300",height="200")
-# user input data
-topFrame3.pack(side ="left")
+myWin = Tk()
+myWin.title("SWACG")
+myWin.iconbitmap("Art/icon.ico")#check me
+myWin.geometry("400x200")
 
-topFrame4 = Frame(tfm, bg="yellow", width="300",height="200")
-# user input data
-topFrame4.pack(side ="left")
+sector_name_label = Label(myWin,text="Sector Name").grid(row=0,column=0,padx=5,sticky = E)
+region_name_label = Label(myWin,text="Region").grid(row=1,column=0,padx=5,sticky = E)
+players_label = Label(myWin,text="Players").grid(row=2,column=0,padx=5,sticky = E)
 
-topFrame5 = Frame(tfm, bg="pink", width="300",height="200")
-# user input data
-topFrame5.pack(side ="left")
-tfm.pack()
+sector_name_box = Entry(myWin)
+region_name_box = Entry(myWin)
+players_box = Entry(myWin)
 
-mfm = Frame(SWACG)
-mapFrame =Frame(mfm,width="1500", height="600")
-#make this a fuction once the nesting is worked out
-fileNum=str(randomRoll(1,3))
-test=Image.open("Art/test"+fileNum+".png")
-testPic=ImageTk.PhotoImage(test)
-testPicLabel = tk.Label(mfm,image=testPic)
-testPicLabel.image = testPic
-testPicLabel.place()
-mapFrame.pack(side="left",fill="both")
-mfm.pack()
+sector_name_box.grid(row=0,column=1,pady=5)
+region_name_box.grid(row=1,column=1,pady=5)
+players_box.grid(row=2,column=1,pady=5)
 
-bfm = Frame(SWACG)
-bottomFrame1 = Frame(bfm, bg="red", width="300",height="200")
-#spacer
-bottomFrame1.pack(side ="left")
+add_button = Button(myWin,text="Generate",padx=42,command=rolls)
+add_button.grid(row=3,column=0)
 
-bottomFrame2 = Frame(bfm, bg="blue", width="300",height="200")
-#spacer
-bottomFrame2.pack(side ="left")
+clear_button = Button(myWin,text="clear",padx=42,command = clear)
+clear_button.grid(row=3,column=1)
 
-bottomFrame3 = Frame(bfm, bg="green", width="300",height="200")
-#save options
-bottomFrame3.pack(side ="left")
+clear_button_name = Button(myWin,text="clear",padx=30,command = clear_name)
+clear_button_name.grid(row=0,column=2)
 
-bottomFrame4 = Frame(bfm, bg="yellow", width="300",height="200")
-#reset buttons
-bottomFrame4.pack(side ="left")
-
-bottomFrame5 = Frame(bfm, bg="pink", width="300",height="200")
-#reset buttons
-bottomFrame5.pack(side ="left")
-bfm.pack()
-
-SWACG.mainloop()
+myWin.mainloop()
