@@ -156,6 +156,24 @@ def fleetBreakdown(fleetSize):
     print("Maximum points spent on ships : ", ship)
     print("Maximum points spent on fighters : ", fighter)
 
+def mapPosition(planetList,numOfPlanets):
+    count = 0
+    mapPos =[]
+    newLst=[]
+    for each in range(numOfPlanets):
+        while count<=(numOfPlanets)-1:
+            coOrd = mapCoOrd()
+            if coOrd in mapPos:
+                coOrd = mapCoOrd()
+            else:
+                mapPos.append(coOrd)
+                count+=1
+
+    for i in zip(planetList,mapPos):
+        newLst.append(i)
+
+    return newLst
+
 ###### validators ######
 def regionCheck(message):
   while True:
@@ -196,17 +214,3 @@ def fleetCheck(message):
         except:
             message = 'You must enter a valid number only : '
 
-def mapPosition(planetList,numOfPlanets):
-    count = 0
-    mapPos =[]
-    for each in range(numOfPlanets):
-        while count<=(numOfPlanets)-1:
-            coOrd = mapCoOrd()
-            if coOrd in mapPos:
-                coOrd = mapCoOrd()
-            else:
-                mapPos.append(coOrd)
-                count+=1
-    newLst = zip(planetList,mapPos)
-
-    return newLst
