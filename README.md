@@ -14,3 +14,5 @@ stripper.py is used to remove a reference number from the planet name and export
 https://github.com/rkbodenner/star-wars-armada-data?fbclid=IwAR34FIZhevCiKtJf50cs5H7BImKq_vhrgrhXV0tOjHdXDpIXZHP28B2cWvs to review
 
 plan is to make this a standalone exe file(unsure if this will work on anything other than a windows PC at present)
+
+473
