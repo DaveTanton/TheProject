@@ -22,6 +22,7 @@ import csv
 # add tabs, tab 1 suer input +map, tab 2 cards for map, tab 3 object cards used?
 # menu system. save, load(?) about nothing more
 # add dropdowns where relevant
+#add collision detection on planet img
 
 def randomRoll(min,max):
     num = random.randint(min,max)
