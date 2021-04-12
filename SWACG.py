@@ -1,19 +1,26 @@
 import random
 import math
 import csv
-#26/03/2021 TODO
-# add data for objective cards ooo done via textfiles
-# create the local rewards function ooo basic version working
-# start on asset creator function OOO
-# start validation
-# start creating modules
-# breakdown of fleet assets per player OOO
-# output to csv 000 completed
-# output to html
-# reroll with same values'
-# reroll with new values
+# TODO
+# DONEadd data for objective cards
+# DONE create the local rewards function 
+# DONE start on asset creator function 
+# DONE start validation
+# DONE start creating modules
+# DONE breakdown of fleet assets per player
+# DONE output MVP to csv 
+# output MVP to html
+# DONE reroll MVP with same values'
+# DONE reroll MVP with new positions values
 # look into converting over to json
-# strip co ord out of asset creator and have it in its own function
+# DONE strip co ord out of asset creator and have it in its own function
+# add validation to objective functions (duplicates)
+# tkinter
+# DONE canvas with random/playerselect bg image
+# DONE canvas add planets to canvas with names
+# DONE save canvas as a png // hardcoded ONLY 
+# add tabs, tab 1 suer input +map, tab 2 cards for map, tab 3 object cards used?
+# menu system. save, load(?) about nothing more
 
 def randomRoll(min,max):
     num = random.randint(min,max)
@@ -21,7 +28,7 @@ def randomRoll(min,max):
 
 def assetCreator(regionNum,numOfPlanets):
     #this function creats the planets ensure each plaent is unique and assigns values and assets randomly to each.
-    #retuns the results as a list
+    #retuns the results as a (overly complex) list
     tmpList = planetNames(regionNum, numOfPlanets)
     planetList =[]
     # streamline the for loop below?
@@ -35,39 +42,24 @@ def assetCreator(regionNum,numOfPlanets):
                 "Standard Objectives cards": objectiveLoader("standardObjectives.txt", 0, 2),
                 "Campaign Objectives": objectiveLoader("campaignObjectives.txt", 0, 2),
                 "Strategic objectives": objectiveLoader("strategicObjectives.txt", 0, 2)
-               # "map position": mapPosition()
             })
 
     return planetList
 
 def planetNames(regionNum,numOfPlanets):
-    #names to be expanded to 100 per region
+    #names to be expanded to 100 max per region if possible
     nameList=[]
     planetList=[]
     name=""
     count=0
-    #core worlds code ver1
     if regionNum == 1:
-       nameList = ["Abregado-rae","Alsakan","Anaxes","Athulla","Balosar","Bar'leth","Botor","Brentaal IV","Cardota",
-            "Cavas","Chandrila","Corellia","Corulag","Coruscant","Courtsilius","Davnar II","Dowut","Duro","Fedalle",
-            "Ganthel","Gatalenta","Grizmallt","Harloff Minor","Hosnian Prime","Humbarine","Kuat","Lanz Carpo","Lespectus",
-            "Metellos","N'Zoth","Neral","Pillio","Plexis","Ralltiir","Raysho","Salliche","Selonia","Sissubo","Skako",
-            "Talus","Tangenine","Tepasi","Tinnel IV","Tralus","Vardos"]
-    #inner rim code ver 2
+        nameList = fileLoader("coreworlds.txt")
     if regionNum == 2:
-        fh=open("innerrim.txt")
-        for name in fh:
-            name=name.strip()
-            nameList.append(name)
-        fh.close()
-        #nameList = ["Champala","Colla IV","Cona","Denon","Dwartii","Gilvaanen","Gorse","Guagenia","Kiffex","Kiffu"]
-    #midrim code ver 3
+        nameList = fileLoader("innerrim.txt")
     if regionNum == 3:
         nameList = fileLoader("midrim.txt")
-        #["Kooriva","Li-Toran","Manaan","Navlaas","Obroa-skai","Onderon","Orchis","Pasher","Phateem","Pheryon"]
-    #outer rim test version
     if regionNum == 4:
-        nameList = ["Pijal","Quarzite","Riosa","Sergia","Taanab","Telerath","Throffdon","Ubduria","Vurdon Ka","Xibariz"]
+        nameList = fileLoader("outerrim.txt")
 
     while count<=(numOfPlanets)-1:
         name = nameList[randomRoll(0, len(nameList) - 1)]
@@ -83,7 +75,7 @@ def bonusVictoryPoints():
     return num
 
 def fileLoader(filename):
-    #finds the file. loads it strips the whitespace and outputs a s a basic list
+    #finds the file. loads it, strips the whitespace and outputs a s a basic list
     filenameList =[]
     fh = open(filename)
     for name in fh:
@@ -93,11 +85,11 @@ def fileLoader(filename):
     return filenameList
 
 def mapCoOrd ():
-    #posistions are placeholder based on a 10x10 grid fo the moment
+    #determins coordinates based on x y px with a 100px deadzone
     position =[]
-    xpos=randomRoll(0,10)
+    xpos=randomRoll(100,1400)
     position.append(xpos)
-    ypos=randomRoll(0,10)
+    ypos=randomRoll(100,500)
     position.append(ypos)
     return position
 
@@ -130,14 +122,11 @@ def locRewards():
     for item in range(0, lr):
         lst.append({lstObj[randomRoll(0, len(lstObj) - 1)]:value})
 
-#1-2
-# values fixed based on card 8,10,12,,24,30
-#intial values are halfed
-# listed upgrades:
+# listed upgrades / with possible values
 # Offensive Retrofit 10/5
 # Defensive Retrofit 10/5
 # Support Team 10/5 8/4
-# Officer 8/4 10/51
+# Officer 8/4 10/5
 # Title 10/5 12/6 8/4
 # Ordnance 10/5 12/6
 # Fleet Command 8/4
@@ -149,7 +138,7 @@ def locRewards():
 # Fleet Support 8/4
     return lst
 
-def fleetBreakdown(fleetSize):
+def fleetBreakdown(fleetSize=200):
     fighter = math.ceil(fleetSize / 3)
     ship =  fleetSize - fighter
     print("fleetsize : ",fleetSize)
@@ -213,4 +202,4 @@ def fleetCheck(message):
                 return message
         except:
             message = 'You must enter a valid number only : '
-
+            
