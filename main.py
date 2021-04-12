@@ -2,24 +2,9 @@ import random
 import math
 import csv
 import SWACG
-#26/03/2021 TODO
-# add data for objective cards ooo done via textfiles
-# DONE create the local rewards function ooo basic version working
-# DONE start on asset creator function OOO
-# DONE start validation
-# DONE start creating modules
-# DONE breakdown of fleet assets per player OOO
-# DONE output to csv 000 completed
-# output to html
-# DONE reroll positions only
-# reroll with same values'
-# reroll with new values
-# look into converting over to json
-# DONE strip co ord out of asset creator and have it in its own function
-#fix objective repeats
+###### temp functions and classes #######
 
-
- ###### main body #######
+###### main body #######
 campaignName = input("sector name : ")
 regionNum = 0
 region = SWACG.regionCheck(" which region is the campaign to be set in?\n"
@@ -42,7 +27,7 @@ else:
     regionNum = 4
 
 numOfPlayers = SWACG.playerCheck(" number of players between 2 and 8: ")
-numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)
+numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)(make into function)
 tradeRoutes = 0 #placeholder var not yet in use
 fleetSize = SWACG.fleetCheck("size of each players fleet? (200 recommended) :")
 
@@ -89,4 +74,3 @@ if writeCSV=="y":
         assetWriter.writerow(["Fleet Size :",fleetSize])
         for item in (planetAssets):
             assetWriter.writerow([item])
-
