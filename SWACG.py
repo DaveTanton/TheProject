@@ -21,6 +21,7 @@ import csv
 # DONE save canvas as a png // hardcoded ONLY 
 # add tabs, tab 1 suer input +map, tab 2 cards for map, tab 3 object cards used?
 # menu system. save, load(?) about nothing more
+# add dropdowns where relevant
 
 def randomRoll(min,max):
     num = random.randint(min,max)
