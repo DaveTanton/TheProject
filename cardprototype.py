@@ -14,7 +14,8 @@ for e in range(len(lst)):
   print ("VP : ",lst[e][0]["vp"])
   print ("Location rewards :")
   for i in range (len(lst[e][0]["location rewards"])):
-    print ("\t",lst[e][0]["location rewards"][i])
+    for k,v in lst[e][0]["location rewards"][i].items():
+      print("\t",k,": ",v)
   print ("Standard Objective cards :")
   for i in range (len(lst[e][0]["Standard Objectives cards"])):
     print ("\t",lst[e][0]["Standard Objectives cards"][i])
@@ -23,4 +24,4 @@ for e in range(len(lst)):
     print ("\t",lst[e][0]["Campaign Objectives"][i])
   print ("Strategic objective cards :")
   for i in range (len(lst[e][0]["Strategic objectives"])):
-    print ("\t",lst[e][0]["Strategic objectives"][i])      
+    print ("\t",lst[e][0]["Strategic objectives"][i])    
