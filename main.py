@@ -2,7 +2,7 @@ import random
 import math
 import csv
 import SWACG
-###### temp functions and classes #######
+###### classes and functions #######
 
 ###### main body #######
 campaignName = input("sector name : ")
@@ -27,7 +27,7 @@ else:
     regionNum = 4
 
 numOfPlayers = SWACG.playerCheck(" number of players between 2 and 8: ")
-numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)(make into function)
+numOfPlanets = int(numOfPlayers)+1 #true formula (numofplayer*3.75)+1)(1stcampaign rules)(2nd campaign needs working out)
 tradeRoutes = 0 #placeholder var not yet in use
 fleetSize = SWACG.fleetCheck("size of each players fleet? (200 recommended) :")
 
@@ -35,9 +35,9 @@ print("\nsector name:",campaignName, "\nRegion:",region,"\nNumber of players:",n
 print(SWACG.fleetBreakdown(fleetSize))
 planetAssets = SWACG.assetCreator(regionNum,numOfPlanets)
 assetLst = SWACG.mapPosition(planetAssets,numOfPlanets)
+print()
 for entry in assetLst:
     print(entry)
-
 print()
 
 while True:
