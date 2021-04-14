@@ -61,7 +61,7 @@ def planetNames(regionNum,numOfPlanets):
         nameList = fileLoader("midrim.txt")
     if regionNum == 4:
         #correct file name
-        nameList = fileLoader("coreworlds.txt")
+        nameList = fileLoader("outerrim.txt")
 
     while count<=(numOfPlanets)-1:
         name = nameList[randomRoll(0, len(nameList) - 1)]
