@@ -30,30 +30,29 @@ def randomRoll(min,max):
 
 def assetCreator(regionNum,numOfPlanets):
     #this function creats the planets ensure each plaent is unique and assigns values and assets randomly to each.
-    #retuns the results as a (overly complex) list
-    tmpList = planetNames(regionNum, numOfPlanets)
+    #retuns the results as a list
+    tlst = planetNames(regionNum, numOfPlanets)
     planetList =[]
     # streamline the for loop below?
-    for item in tmpList:
-        planetList = []
-        for item in range(0, len(tmpList)):
+    for item in tlst:
+        for item in range(0, len(tlst)):
             planetList.append({
-                "name": tmpList[item],  # tmp list holds the planet data before moving it here
+                "name": tlst[item],  # tlst holds the planet data before moving it here
                 "vp": bonusVictoryPoints(),
                 "location rewards": locRewards(),
-                "Standard Objectives cards": objectiveLoader("standardObjectives.txt", 0, 2),
+                "Standard Objectives": objectiveLoader("standardObjectives.txt", 0, 2),
                 "Campaign Objectives": objectiveLoader("campaignObjectives.txt", 0, 2),
-                "Strategic objectives": objectiveLoader("strategicObjectives.txt", 0, 2)
+                "Strategic Objectives": objectiveLoader("strategicObjectives.txt", 0, 2)
             })
-
     return planetList
 
 def planetNames(regionNum,numOfPlanets):
-    #names to be expanded to 100 max per region if possible
+    #names to be expanded to 100 per region where possible
     nameList=[]
     planetList=[]
     name=""
     count=0
+    #core worlds code ver1
     if regionNum == 1:
         nameList = fileLoader("coreworlds.txt")
     if regionNum == 2:
@@ -61,7 +60,8 @@ def planetNames(regionNum,numOfPlanets):
     if regionNum == 3:
         nameList = fileLoader("midrim.txt")
     if regionNum == 4:
-        nameList = fileLoader("outerrim.txt")
+        #correct file name
+        nameList = fileLoader("coreworlds.txt")
 
     while count<=(numOfPlanets)-1:
         name = nameList[randomRoll(0, len(nameList) - 1)]
@@ -77,7 +77,7 @@ def bonusVictoryPoints():
     return num
 
 def fileLoader(filename):
-    #finds the file. loads it, strips the whitespace and outputs a s a basic list
+    #finds the file. loads it strips the whitespace and outputs a s a basic list
     filenameList =[]
     fh = open(filename)
     for name in fh:
@@ -87,7 +87,7 @@ def fileLoader(filename):
     return filenameList
 
 def mapCoOrd ():
-    #determins coordinates based on x y px with a 100px deadzone
+    # creaates the x y coordinates for the .place() 
     position =[]
     xpos=randomRoll(100,1400)
     position.append(xpos)
@@ -95,12 +95,37 @@ def mapCoOrd ():
     position.append(ypos)
     return position
 
+def mapPosition(planetList,numOfPlanets):
+    count = 0
+    mapPos =[]
+    newLst=[]
+    for each in range(numOfPlanets):
+        while count<=(numOfPlanets)-1:
+            coOrd = mapCoOrd()
+            if coOrd in mapPos:
+                coOrd = mapCoOrd()
+            else:
+                mapPos.append(coOrd)
+                count+=1
+
+    for i in zip(planetList,mapPos):
+        newLst.append(i)
+# MAYBE SET A "BOX " AROUND THE ASSET
+    return newLst
+
 def objectiveLoader(filename,min,max):
     objectives = randomRoll(min, max)
-    lst = []
     lstObj = fileLoader(filename)
+    lst = []
+    count=0
     for item in range(0, objectives):
-        lst.append(lstObj[randomRoll(0,len(lstObj)-1)])
+       while count<=max:
+           resource = lstObj[randomRoll(0,len(lstObj)-1)]
+           if resource in lst:
+               resource = lstObj[randomRoll(0,len(lstObj)-1)]
+           else:
+               lst.append(resource)
+               count+=1
     return lst
 
 def locRewards():
@@ -124,11 +149,14 @@ def locRewards():
     for item in range(0, lr):
         lst.append({lstObj[randomRoll(0, len(lstObj) - 1)]:value})
 
-# listed upgrades / with possible values
+#1-2
+# values fixed based on card 8,10,12,,24,30
+#intial values are halfed
+# listed upgrades:
 # Offensive Retrofit 10/5
 # Defensive Retrofit 10/5
 # Support Team 10/5 8/4
-# Officer 8/4 10/5
+# Officer 8/4 10/51
 # Title 10/5 12/6 8/4
 # Ordnance 10/5 12/6
 # Fleet Command 8/4
@@ -140,30 +168,12 @@ def locRewards():
 # Fleet Support 8/4
     return lst
 
-def fleetBreakdown(fleetSize=200):
+def fleetBreakdown(fleetSize):
     fighter = math.ceil(fleetSize / 3)
     ship =  fleetSize - fighter
     print("fleetsize : ",fleetSize)
     print("Maximum points spent on ships : ", ship)
     print("Maximum points spent on fighters : ", fighter)
-
-def mapPosition(planetList,numOfPlanets):
-    count = 0
-    mapPos =[]
-    newLst=[]
-    for each in range(numOfPlanets):
-        while count<=(numOfPlanets)-1:
-            coOrd = mapCoOrd()
-            if coOrd in mapPos:
-                coOrd = mapCoOrd()
-            else:
-                mapPos.append(coOrd)
-                count+=1
-
-    for i in zip(planetList,mapPos):
-        newLst.append(i)
-
-    return newLst
 
 ###### validators ######
 def regionCheck(message):
@@ -204,4 +214,3 @@ def fleetCheck(message):
                 return message
         except:
             message = 'You must enter a valid number only : '
-            
