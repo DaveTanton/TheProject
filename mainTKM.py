@@ -3,8 +3,18 @@ from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk,Image,ImageGrab
 
+global bg_img
+global cv
+
 def on_tab_selected(event):
     selected_tab = event.widget.select()
+
+def on_map_change(event):
+    cv.delete("map")
+    bg_img = ImageTk.PhotoImage(file="art/maps/"+myMapCombo.get()+".png")
+    cv.create_image(0, 0, image=bg_img, anchor=NW,tag="map")
+    cv.config(image=bg_img)
+    cv.place(x=0, y=0)
 
 def donothing():
    filewin = Toplevel(myWin)
@@ -40,12 +50,11 @@ class SWACG_alpha:
         self.fleet = int(fsb.get())
         if self.fleet <= 0:
             self.fleet = 200
+        #needs to evaluate a none vaule type
         self.plst = SWACG.assetCreator (self.regionNum,self.planets)
         self.llst = SWACG.mapPosition (self.plst,self.planets)
         self.icons()
         # self.card_data()
-        print(self.name)
-        print(self.fleet)
 
     def icons(self):
        self.img_lst = []
@@ -181,14 +190,14 @@ rb1=Radiobutton(t1,text="2",variable=r, value=2)
 rb2=Radiobutton(t1,text="4",variable=r, value=4)
 rb3=Radiobutton(t1,text="6",variable=r, value=6)
 rb4=Radiobutton(t1,text="8",variable=r, value=8)
-rb5=Radiobutton(t1,text="10",variable=r, value=18)
+#rb5=Radiobutton(t1,text="10",variable=r, value=18)
 
 lbl_players.grid(row=2,column=0,padx=10,pady=5)
 rb1.grid(row=2,column=1,padx=5,pady=5)
 rb2.grid(row=2,column=2,padx=5,pady=5)
 rb3.grid(row=2,column=3,padx=5,pady=5)
 rb4.grid(row=2,column=4,padx=5,pady=5)
-rb4.grid(row=2,column=5,padx=5,pady=5)
+#rb4.grid(row=2,column=5,padx=5,pady=5)
 
 #combo box
 lbl_region_select=Label(t1,text="Region")
@@ -203,17 +212,18 @@ myCombo.grid(row=3,column=1,columnspan=4,padx=10,pady=5)
 
 lbl_map_select=Label(t1,text="Sector map")
 
-options=["map 1", "map 2", "map 3", "map 4"]
+options=["map1", "map2", "map3", "map4"]
 myMapCombo = ttk.Combobox(t1,value=options)
 myMapCombo.current(0)
-myMapCombo.bind("<<ComboboxSelected>>")
+myMapCombo.bind("<<ComboboxSelected>>",on_map_change)
 
 lbl_map_select.grid(row=4,column=0,padx=10,pady=5)
 myMapCombo.grid(row=4,column=1,columnspan=4,padx=10,pady=5)
 
 
 lbl_fs = Label(t1,text="Fleet Size")
-fsb= Entry(t1)
+fsb= Entry(t1,)
+fsb.insert(0,0)
 
 lbl_fs.grid(row=5,column=0,padx=5,pady=5,sticky=E)
 fsb.grid(row=5,column=2,columnspan=2,padx=5,pady=5,sticky=E)
@@ -238,8 +248,6 @@ t3 = LabelFrame (menuframe,text="Frame Three",height=250,width=380)
 
 #t4 = LabelFrame (menuframe,text="placeholder",height=200,width=380)
 
-
-
 #details
 #sector name
 #players
@@ -256,8 +264,8 @@ frame_tab_1 = Frame(mainframe)
 
 mapframe = Frame(tab1,height=790,width=1120)
 cv = Canvas(mapframe,height=790,width=1120,borderwidth=0,highlightthickness=0)
-image1 = ImageTk.PhotoImage(file="art/maps/map2.png")
-cv.create_image(0,0,image=image1,anchor=NW)
+bg_img = ImageTk.PhotoImage(file="art/maps/map1.png")
+cv.create_image(0,0,image=bg_img,anchor=NW,tag="map")
 cv.place(x=0,y=0)
 
 frame_tab_2 = Frame(mainframe)
