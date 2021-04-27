@@ -212,7 +212,7 @@ myCombo.grid(row=3,column=1,columnspan=4,padx=10,pady=5)
 
 lbl_map_select=Label(t1,text="Sector map")
 
-options=["map1", "map2", "map3", "map4"]
+options=["map1", "map2"]
 myMapCombo = ttk.Combobox(t1,value=options)
 myMapCombo.current(0)
 myMapCombo.bind("<<ComboboxSelected>>",on_map_change)
