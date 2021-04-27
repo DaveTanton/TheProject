@@ -13,33 +13,39 @@ def donothing():
 
 class SWACG_alpha:
     def __init__(self):
-       # self.Campagin_name="TODO"
+        self.name=""
         self.players = 0
         self.planets = 0
         self.region = 0
         self.regionNum = 0
+        self.fleet=0
         self.plst = None
         self.llst = None
         self.img_lst = []
 
     def generate(self):
-       self.players = r.get()
-       self.planets = SWACG.num_planets(self.players)
-       self.regionNum = 0
-       self.region = myCombo.get()
-       if self.region == "Core Worlds":
+        self.name = snb.get()
+        self.players = r.get()
+        self.planets = SWACG.num_planets(self.players)
+        self.regionNum = 0
+        self.region = myCombo.get()
+        if self.region == "Core Worlds":
            self.regionNum = 1
-       if self.region == "inner Rim":
+        if self.region == "inner Rim":
            self.regionNum= 2
-       if self.region == "Mid Rim":
+        if self.region == "Mid Rim":
            self.regionNum= 3
-       if self.region == "Outer Territories":
+        if self.region == "Outer Territories":
            self.regionNum = 4
-       self.plst = SWACG.assetCreator (self.regionNum,self.planets)
-       self.llst = SWACG.mapPosition (self.plst,self.planets)
-       self.icons()
-      # self.card_data()
-       #print(self.llst)
+        self.fleet = int(fsb.get())
+        if self.fleet <= 0:
+            self.fleet = 200
+        self.plst = SWACG.assetCreator (self.regionNum,self.planets)
+        self.llst = SWACG.mapPosition (self.plst,self.planets)
+        self.icons()
+        # self.card_data()
+        print(self.name)
+        print(self.fleet)
 
     def icons(self):
        self.img_lst = []
@@ -119,7 +125,6 @@ myWin.title("SWACG")
 myWin.iconbitmap("art/icon.ico")# TODO
 myWin.geometry("1500x830")
 
-
 SWACG_assets=SWACG_alpha()
 
 #TODO ADD Menu
@@ -148,7 +153,6 @@ helpmenu.add_command(label="About...", command=donothing)
 menubar.add_cascade(label="Help", menu=helpmenu)
 
 myWin.config(menu=menubar)
-
 
 tab_parent = ttk.Notebook(mainframe)
 
