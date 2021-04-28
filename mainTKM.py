@@ -1,10 +1,10 @@
 import SWACG
+import math
 from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk,Image,ImageGrab
 
 global bg_img
-global cv
 
 def on_tab_selected(event):
     selected_tab = event.widget.select()
@@ -13,7 +13,7 @@ def on_map_change(event):
     cv.delete("map")
     bg_img = ImageTk.PhotoImage(file="art/maps/"+myMapCombo.get()+".png")
     cv.create_image(0, 0, image=bg_img, anchor=NW,tag="map")
-    cv.config(image=bg_img)
+    cv.config(image=bg_img)# causes a traceback error but works?
     cv.place(x=0, y=0)
 
 def donothing():
@@ -54,12 +54,13 @@ class SWACG_alpha:
         self.plst = SWACG.assetCreator (self.regionNum,self.planets)
         self.llst = SWACG.mapPosition (self.plst,self.planets)
         self.icons()
+        self.campaign_details()
         # self.card_data()
 
     def icons(self):
        self.img_lst = []
-       self.icon_lst=[]
-       self.clear()
+       self.icon_lst = []
+       self.clear("nil")
        lstObj = SWACG.fileLoader("locRe.txt")
        for i in range(len(self.llst)):
            PPP = ImageTk.PhotoImage(file="art/icons/PPP" + str(SWACG.randomRoll(1, 1)) + ".png")
@@ -78,9 +79,23 @@ class SWACG_alpha:
                self.icon_lst.append(icon)
            self.img_lst.append(PPP)
 
-    def clear(self):
+    def campaign_details(self):
+        lbl_name_val.config(text=self.name)
+        lbl_players_val.config(text=self.players)
+        lbl_planets_val.config(text=self.planets)
+        lbl_region_val.config(text=self.region)
+        self.fleetBreakdown(self.fleet)
+
+    def fleetBreakdown(self,fleetSize):
+        self.fighter = math.ceil(fleetSize / 3)
+        self.ship = fleetSize - self.fighter
+        lbl_fleet_val.config(text=+fleetSize)
+        lbl_fleet_ships_val.config(text=str(self.ship))
+        lbl_fleet_fighters_val.config(text=(self.fighter))
+
+    def clear(self,tag):
        self.img_lst=[]
-       cv.delete("nil")
+       cv.delete(tag)
 
     def coOrd_regen(self):
         self.llst = SWACG.mapPosition(self.plst, self.planets)
@@ -237,23 +252,44 @@ btn_generate.grid(row=6,column=0,columnspan=2,padx=10,pady=5)
 btn_coOrd_only.grid(row=6,column=4,columnspan=2,padx=10,pady=5)
 btn_clear.grid(row=6,column=2,columnspan=2,padx=10,pady=5)
 
-t2 = LabelFrame (menuframe,text="Frame Two",height=250,width=380)
-lbl_players=Label(t2,text="Players")
-lbl_p=Label(t2,text="")
+t2 = LabelFrame (menuframe,text="",height=250,width=380)
 
-lbl_p.pack(side=RIGHT)
-lbl_players.pack(side=LEFT)
+lbl_name = Label(t2,text="Sector Name")
+lbl_players = Label(t2,text="Players")
+lbl_planets = Label(t2,text="Planets in Sector")
+lbl_region = Label(t2,text="Region of Sector")
+lbl_fleet = Label(t2,text="Fleet size")
+lbl_fleet_ships = Label(t2,text="to be spent on ships")
+lbl_fleet_fighters = Label (t2,text="to be spent on fighters")
+
+lbl_name_val=Label(t2,text="")
+lbl_players_val=Label(t2,text="")
+lbl_planets_val=Label(t2,text="")
+lbl_region_val=Label(t2,text="")
+lbl_fleet_val=Label(t2,text="")
+lbl_fleet_ships_val = Label(t2,text="")
+lbl_fleet_fighters_val = Label(t2,text="")
+
+lbl_name.grid(row=0,column=0)
+lbl_players.grid(row=1,column=0)
+lbl_planets.grid(row=2,column=0)
+lbl_region.grid(row=3,column=0)
+lbl_fleet.grid(row=4,column=0)
+lbl_fleet_ships.grid(row=5,column=0)
+lbl_fleet_fighters.grid(row=6,column=0)
+
+lbl_name_val.grid(row=0,column=1)
+lbl_players_val.grid(row=1,column=1)
+lbl_planets_val.grid(row=2,column=1)
+lbl_region_val.grid(row=3,column=1)
+lbl_fleet_val.grid(row=4,column=1)
+lbl_fleet_ships_val.grid(row=5,column=1)
+lbl_fleet_fighters_val.grid(row=6,column=1)
+
 
 t3 = LabelFrame (menuframe,text="Frame Three",height=250,width=380)
 
 #t4 = LabelFrame (menuframe,text="placeholder",height=200,width=380)
-
-#details
-#sector name
-#players
-#planets
-#fleet size
-#fleet brakdown
 
 t1.grid(row=0,column=0,padx=20)
 t2.grid(row=1,column=0,padx=20)
