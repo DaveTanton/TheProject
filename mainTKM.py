@@ -36,7 +36,7 @@ class SWACG_alpha:
     def generate(self):
         self.name = snb.get()
         self.players = r.get()
-        self.planets = SWACG.num_planets(self.players)
+        self.planets = self.num_planets(self.players)
         self.regionNum = 0
         self.region = myCombo.get()
         if self.region == "Core Worlds":
@@ -55,7 +55,7 @@ class SWACG_alpha:
         self.llst = SWACG.mapPosition (self.plst,self.planets)
         self.icons()
         self.campaign_details()
-        # self.card_data()
+        self.card_data()
 
     def icons(self):
        self.img_lst = []
@@ -97,6 +97,10 @@ class SWACG_alpha:
        self.img_lst=[]
        cv.delete(tag)
 
+    def num_planets(self,players):
+        planets = int(math.ceil(players * 3.75) + 1)
+        return planets
+
     def coOrd_regen(self):
         self.llst = SWACG.mapPosition(self.plst, self.planets)
         self.icons()
@@ -106,43 +110,54 @@ class SWACG_alpha:
         return result
 
     def card_data(self):
-        #card_frame
-        #frame_lst
-        for e in range(len(self.plst)):
+        self.card_frame =LabelFrame(tab2, text="planet card")
+        #self.frame_lst
+
+        lr_asset=Label(tab2)
+        so_label=Label(tab2)
+        so_asset=Label(tab2)
+        co_label=Label(tab2)
+        co_asset=Label(tab2)
+        sto_label=Label(tab2)
+        sto_asset=Label(tab2)
+
+        for f in range(len(self.plst)):
             dynamic_frames = []
             for e in range(len(self.plst)):
                 card_frame = LabelFrame(tab2, text="planet card")
-                name_label = Label(tab2, text="planet name: " + self.plst[e][0]["name"])
-                vp_label = Label(tab2, text="VP:" + str(self.plst[e][0]["vp"]))
+                name_label = Label(tab2, text="planet name: " + self.plst[e]["name"])
+                vp_label = Label(tab2, text="VP:" + str(self.plst[e]["vp"]))
                 lr_label = Label(tab2, text="Location rewards:")
-                for i in range(len(self.plst[e][0]["location rewards"])):
-                    for k, v in self.plst[e][0]["location rewards"][i].items():
+                for i in range(len(self.plst[e]["location rewards"])):
+                    for k, v in self.plst[e]["location rewards"][i].items():
                         asset = k, v
                         lr_asset = Label(tab2, text=asset)
-                so_label = Label(tab2, text="Standard Objective cards:")
-                for i in range(len(self.plst[e][0]["Standard Objectives cards"])):
-                    asset = self.plst[e][0]["Standard Objectives cards"][i]
-                    so_asset = Label(tab2, text=asset)
-                co_label = Label(tab2, text="Campaign Objectives cards:")
-                for i in range(len(self.plst[e][0]["Campaign Objectives"])):
-                    asset = self.plst[e][0]["Campaign Objectives"][i]
-                    co_asset = Label(tab2, text=asset)
-                sto_label = Label(tab2, text="Strategic objective cards:")
-                for i in range(len(self.plst[e][0]["Strategic objectives"])):
-                    asset = self.plst[e][0]["Strategic objectives"][i]
-                    sto_asset = Label(tab2, text=asset)
+                so_label.config(text="Standard Objective cards:")
+                for i in range(len(self.plst[e]["Standard Objectives"])):
+                    asset = self.plst[e]["Standard Objectives"][i]
+                    so_asset.config(text=asset)
+                co_label.config(text="Campaign Objectives cards:")
+                for i in range(len(self.plst[e]["Campaign Objectives"])):
+                    asset = self.plst[e]["Campaign Objectives"][i]
+                    co_asset.config(text=asset)
+                sto_label.config(text="Strategic Objectives cards:")
+                for i in range(len(self.plst[e]["Strategic Objectives"])):
+                    asset = self.plst[e]["Strategic Objectives"][i]
+                    sto_asset.config(text=asset)
+            
+                card_frame.pack(side=RIGHT)
+                name_label.pack()
+                vp_label.pack()
+                lr_label.pack()
+                lr_asset.pack()
+                so_label.pack()
+                so_asset.pack()
+                co_label.pack()
+                co_asset.pack()
+                sto_label.pack()
+                sto_asset.pack()
+
                 dynamic_frames.append(card_frame)
-            card_frame.pack()
-            name_label.pack()
-            vp_label.pack()
-            lr_label.pack()
-            lr_asset.pack()
-            so_label.pack()
-            so_asset.pack()
-            co_label.pack()
-            co_asset.pack()
-            sto_label.pack()
-            sto_asset.pack()
 
 myWin = Tk()
 myWin.title("SWACG")
@@ -235,7 +250,6 @@ myMapCombo.bind("<<ComboboxSelected>>",on_map_change)
 lbl_map_select.grid(row=4,column=0,padx=10,pady=5)
 myMapCombo.grid(row=4,column=1,columnspan=4,padx=10,pady=5)
 
-
 lbl_fs = Label(t1,text="Fleet Size")
 fsb= Entry(t1,)
 fsb.insert(0,0)
@@ -252,7 +266,7 @@ btn_generate.grid(row=6,column=0,columnspan=2,padx=10,pady=5)
 btn_coOrd_only.grid(row=6,column=4,columnspan=2,padx=10,pady=5)
 btn_clear.grid(row=6,column=2,columnspan=2,padx=10,pady=5)
 
-t2 = LabelFrame (menuframe,text="",height=250,width=380)
+t2 = LabelFrame (menuframe,text="Frame Two",height=250,width=380)
 
 lbl_name = Label(t2,text="Sector Name")
 lbl_players = Label(t2,text="Players")
@@ -286,7 +300,6 @@ lbl_fleet_val.grid(row=4,column=1)
 lbl_fleet_ships_val.grid(row=5,column=1)
 lbl_fleet_fighters_val.grid(row=6,column=1)
 
-
 t3 = LabelFrame (menuframe,text="Frame Three",height=250,width=380)
 
 #t4 = LabelFrame (menuframe,text="placeholder",height=200,width=380)
@@ -305,7 +318,6 @@ cv.create_image(0,0,image=bg_img,anchor=NW,tag="map")
 cv.place(x=0,y=0)
 
 frame_tab_2 = Frame(mainframe)
-
 
 tab_parent.grid(row=0,column=0)
 frame_tab_1.grid(row=0,column=0)
