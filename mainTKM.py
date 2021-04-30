@@ -110,28 +110,43 @@ class SWACG_alpha:
         return result
 
     def card_data(self):
-        self.card_frame =LabelFrame(tab2, text="planet card")
+        self.scrollFrame = Frame(tab2)
+        self.scrollFrame.pack(fill=BOTH, expand=1)
+
+        self.myCanvas = Canvas(self.scrollFrame)
+        self.myCanvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        self.myscrollbar = ttk.Scrollbar(self.scrollFrame, orient=VERTICAL, command=self.myCanvas.yview)
+        self.myscrollbar.pack(side=RIGHT, fill=Y)
+
+        self.myCanvas.configure(yscrollcommand=self.myscrollbar.set)
+        self.myCanvas.bind("<Configure>", lambda e: self.myCanvas.configure(scrollregion=self.myCanvas.bbox("all")))
+
+        self.viewport = Frame(self.myCanvas)
+        self.myCanvas.create_window((0, 0), window=self.viewport, anchor=NW)
+
+        self.card_frame =LabelFrame(self.viewport, text="planet card")
         #self.frame_lst
 
-        lr_asset=Label(tab2)
-        so_label=Label(tab2)
-        so_asset=Label(tab2)
-        co_label=Label(tab2)
-        co_asset=Label(tab2)
-        sto_label=Label(tab2)
-        sto_asset=Label(tab2)
+        lr_asset=Label(self.viewport)
+        so_label=Label(self.viewport)
+        so_asset=Label(self.viewport)
+        co_label=Label(self.viewport)
+        co_asset=Label(self.viewport)
+        sto_label=Label(self.viewport)
+        sto_asset=Label(self.viewport)
 
         for f in range(len(self.plst)):
             dynamic_frames = []
             for e in range(len(self.plst)):
-                card_frame = LabelFrame(tab2, text="planet card")
-                name_label = Label(tab2, text="planet name: " + self.plst[e]["name"])
-                vp_label = Label(tab2, text="VP:" + str(self.plst[e]["vp"]))
-                lr_label = Label(tab2, text="Location rewards:")
+                card_frame = LabelFrame(self.viewport, text="planet card")
+                name_label = Label(self.viewport, text="planet name: " + self.plst[e]["name"])
+                vp_label = Label(self.viewport, text="VP:" + str(self.plst[e]["vp"]))
+                lr_label = Label(self.viewport, text="Location rewards:")
                 for i in range(len(self.plst[e]["location rewards"])):
                     for k, v in self.plst[e]["location rewards"][i].items():
                         asset = k, v
-                        lr_asset = Label(tab2, text=asset)
+                        lr_asset = Label(self.viewport, text=asset)
                 so_label.config(text="Standard Objective cards:")
                 for i in range(len(self.plst[e]["Standard Objectives"])):
                     asset = self.plst[e]["Standard Objectives"][i]
@@ -144,8 +159,8 @@ class SWACG_alpha:
                 for i in range(len(self.plst[e]["Strategic Objectives"])):
                     asset = self.plst[e]["Strategic Objectives"][i]
                     sto_asset.config(text=asset)
-            
-                card_frame.pack(side=RIGHT)
+
+                card_frame.pack()
                 name_label.pack()
                 vp_label.pack()
                 lr_label.pack()
@@ -158,6 +173,22 @@ class SWACG_alpha:
                 sto_asset.pack()
 
                 dynamic_frames.append(card_frame)
+
+    def scroll(self):
+        self.scrollFrame = Frame(tab2)
+        self.scrollFrame.pack(fill=BOTH, expand=1)
+
+        self.myCanvas = Canvas(self.scrollFrame)
+        self.myCanvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        self.myscrollbar = ttk.Scrollbar(self.scrollFrame, orient=VERTICAL, command=self.myCanvas.yview)
+        self.myscrollbar.pack(side=RIGHT, fill=Y)
+
+        self.myCanvas.configure(yscrollcommand=self.myscrollbar.set)
+        self.myCanvas.bind("<Configure>", lambda e: self.myCanvas.configure(scrollregion=self.myCanvas.bbox("all")))
+
+        self.viewport = Frame(self.myCanvas)
+        self.myCanvas.create_window((0, 0), window=self.viewport, anchor=NW)
 
 myWin = Tk()
 myWin.title("SWACG")
@@ -197,6 +228,7 @@ tab_parent = ttk.Notebook(mainframe)
 
 tab1 = ttk.Frame(tab_parent)
 tab2 = ttk.Frame(tab_parent)
+
 
 tab_parent.add(tab1, text="Map Generation")
 tab_parent.add(tab2, text="Map Cards")
@@ -318,6 +350,7 @@ cv.create_image(0,0,image=bg_img,anchor=NW,tag="map")
 cv.place(x=0,y=0)
 
 frame_tab_2 = Frame(mainframe)
+#scrollbar
 
 tab_parent.grid(row=0,column=0)
 frame_tab_1.grid(row=0,column=0)
