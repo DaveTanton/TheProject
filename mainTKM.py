@@ -110,21 +110,7 @@ class SWACG_alpha:
         return result
 
     def card_data(self):
-        self.scrollFrame = Frame(tab2)
-        self.scrollFrame.pack(fill=BOTH, expand=1)
-
-        self.myCanvas = Canvas(self.scrollFrame)
-        self.myCanvas.pack(side=LEFT, fill=BOTH, expand=True)
-
-        self.myscrollbar = ttk.Scrollbar(self.scrollFrame, orient=VERTICAL, command=self.myCanvas.yview)
-        self.myscrollbar.pack(side=RIGHT, fill=Y)
-
-        self.myCanvas.configure(yscrollcommand=self.myscrollbar.set)
-        self.myCanvas.bind("<Configure>", lambda e: self.myCanvas.configure(scrollregion=self.myCanvas.bbox("all")))
-
-        self.viewport = Frame(self.myCanvas)
-        self.myCanvas.create_window((0, 0), window=self.viewport, anchor=NW)
-
+        self.scroll()
         self.card_frame =LabelFrame(self.viewport, text="planet card")
         #self.frame_lst
 
