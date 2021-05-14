@@ -22,10 +22,12 @@ def on_map_change(event):
     cv.config(image=bg_img)# causes a traceback error but works?
     cv.place(x=0, y=0)
 
+
 def do_nothing():
    filewin = Toplevel(root)
    button = Button(filewin, text="Do nothing button")
    button.pack()
+
 
 class SWACG_main:
     def __init__(self):
@@ -40,6 +42,7 @@ class SWACG_main:
         self.img_lst = []
 
     def generate(self):
+        self.clear_viewport()
         self.name = snb.get()
         self.players = r.get()
         self.planets = self.num_of_planets(self.players)
@@ -65,7 +68,7 @@ class SWACG_main:
     def icons(self):
        self.img_lst = []
        self.icon_lst = []
-       self.clear("nil")
+       self.clear_icon("nil")
        icon = None
        lst_obj = SWACG.file_loader("locRe.txt")
        for i in range(len(self.l_lst)):
@@ -101,10 +104,14 @@ class SWACG_main:
         lbl_fleet_ships_val.config(text=str(self.ship))
         lbl_fleet_fighters_val.config(text=str(self.fighter))
 
+    def clear_icon(self,tag):
+        self.img_lst = []
+        cv.delete(tag)
+
     def clear(self, tag):
        self.img_lst = []
        cv.delete(tag)
-       self.clear_frame()
+       self.clear_viewport()
        lbl_name_val.config(text=" ")
        lbl_players_val.config(text="0")
        lbl_planets_val.config(text="0")
@@ -112,6 +119,10 @@ class SWACG_main:
        lbl_fleet_val.config(text="0")
        lbl_fleet_ships_val.config(text="0")
        lbl_fleet_fighters_val.config(text="0")
+
+    def clear_viewport(self):
+        for widgets in viewport.winfo_children():
+            widgets.destroy()
 
     def num_of_planets(self, players):
         planets = int(math.ceil(players * 3.75) + 1)
@@ -127,47 +138,46 @@ class SWACG_main:
 
     def card_data(self):
 
-        dynamic_frames = []
-
-        lbl_lr_val=Label()
-        lbl_so_val=Label()
-        lbl_co_val=Label()
-        lbl_sto_val=Label()
+        lbl_lr_val = Label()
+        lbl_so_val = Label()
+        lbl_co_val = Label()
+        lbl_sto_val = Label()
 
         for e in range(len(self.p_lst)):
-            card_frame =LabelFrame(viewport, text="planet Card")
+            card_frame = LabelFrame(viewport, text="planet Card")
             name_label = Label(card_frame, text="planet name: " + self.p_lst[e]["name"])
             vp_label = Label(card_frame, text="VP:" + str(self.p_lst[e]["vp"]))
             lbl_lr = Label(card_frame, text="Location rewards:")
             for i in range(len(self.p_lst[e]["location rewards"])):
                 for k, v in self.p_lst[e]["location rewards"][i].items():
                     asset = k, v
-                    lbl_lr_val=Label(card_frame, text=asset)
-            lbl_so=Label(card_frame,text="Standard Objective cards:")
+                    lbl_lr_val = Label(card_frame, text=asset)
+            lbl_so = Label(card_frame, text="Standard Objective cards:")
             for i in range(len(self.p_lst[e]["Standard Objectives"])):
                 asset = self.p_lst[e]["Standard Objectives"][i]
-                lbl_so_val=Label(card_frame,text=asset)
-            lbl_co=Label(card_frame,text="Campaign Objectives cards:")
+                lbl_so_val = Label(card_frame, text=asset)
+            lbl_co = Label(card_frame, text="Campaign Objectives cards:")
             for i in range(len(self.p_lst[e]["Campaign Objectives"])):
                 asset = self.p_lst[e]["Campaign Objectives"][i]
-                lbl_co_val=Label(card_frame,text=asset)
-            lbl_sto=Label(card_frame,text="Strategic Objectives cards:")
+                lbl_co_val = Label(card_frame, text=asset)
+            lbl_sto = Label(card_frame, text="Strategic Objectives cards:")
             for i in range(len(self.p_lst[e]["Strategic Objectives"])):
                 asset = self.p_lst[e]["Strategic Objectives"][i]
-                lbl_sto_val=Label(card_frame,text=asset)
-            dynamic_frames.append(card_frame)
+                lbl_sto_val = Label(card_frame, text=asset)
 
-            card_frame.pack(side=RIGHT,fill=None, expand=False,padx=5)
-            name_label.grid(column=0, row=1)
-            vp_label.grid(column=0, row=2)
-            lbl_lr.grid(column=0, row=3)
-            lbl_lr_val.grid(column=0, row=4)
-            lbl_so.grid(column=0, row=5)
-            lbl_so_val.grid(column=0, row=6)
-            lbl_co.grid(column=0, row=7)
-            lbl_co_val.grid(column=0, row=8)
-            lbl_sto.grid(column=0, row=9)
-            lbl_sto_val.grid(column=0, row=10)
+
+
+            card_frame.pack(side=TOP, fill=BOTH, expand=True)
+            name_label.grid(column=1, row=0)
+            vp_label.grid(column=2, row=0)
+            lbl_lr.grid(column=3, row=0)
+            lbl_lr_val.grid(column=3, row=1)
+            lbl_so.grid(column=4, row=0)
+            lbl_so_val.grid(column=4, row=1)
+            lbl_co.grid(column=5, row=0)
+            lbl_co_val.grid(column=5, row=0)
+            lbl_sto.grid(column=6, row=0)
+            lbl_sto_val.grid(column=6, row=0)
 
     def save_file(self):
         formats = [("Comma Separated values", "*.csv"), ("Plain Text", "*.txt")]
@@ -184,9 +194,6 @@ class SWACG_main:
                 for item in self.p_lst:
                     asset_writer.writerow([item])
 
-    def clear_frame(self):
-        for widgets in viewport.winfo_children():
-            widgets.destroy()
 
 root = Tk()
 root.title("SWACG")
@@ -350,10 +357,10 @@ scroll_canvas.pack(side=LEFT, fill=BOTH, expand=True)
 scroll_bar = ttk.Scrollbar(scrollFrame, orient=VERTICAL, command=scroll_canvas.yview)
 scroll_bar.pack(side=RIGHT, fill=Y)
 
-scroll_canvas.configure(yscrollcommand=scroll_bar.set)
+scroll_canvas.configure(yscrollcommand=scroll_bar.set,width=1120)
 scroll_canvas.bind("<Configure>",
                                 lambda e: scroll_canvas.configure(scrollregion=scroll_canvas.bbox("all")))
-viewport = Frame(scroll_canvas)
+viewport = Frame(scroll_canvas,width=1120)
 scroll_canvas.create_window((0, 0), window=viewport, anchor=NW)
 
 tab_parent.grid(row=0, column=0)
