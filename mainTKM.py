@@ -8,11 +8,9 @@ import csv
 
 # TODO defining an event inside a class
 # TODO look into map issues when changing map
-# TODO into lr duplicating resources
 # TODO icon.ico
-# TODO 8.7, 8.6 7.6
-#todo dtat validation fleet
-#todo scroll missing in some instances (back to a function?)
+# todo data validation fleet
+# todo scroll missing in some instances (back to a function?)
 
 global bg_img
 
@@ -25,7 +23,6 @@ def on_map_change(event):
     cv.create_image(0, 0, image=bg_img, anchor=NW, tag="map")
     cv.config(image=bg_img)# causes a traceback error but works?
     cv.place(x=0, y=0)
-
 
 def do_nothing():
    filewin = Toplevel(root)
@@ -88,7 +85,6 @@ class SWACG_main:
         self.l_lst = SWACG.map_position(self.p_lst, self.planets)
         self.icons()
         self.campaign_details()
-        #self.scroll_area()
         self.card_data()
 
     def icons(self):
@@ -105,7 +101,7 @@ class SWACG_main:
         icon = None
         lst_obj = SWACG.file_loader("locRe.txt")
         for i in range(len(self.l_lst)):
-           ppp = ImageTk.PhotoImage(file="art/icons/PPP" + str(SWACG.random_roll(1, 1)) + ".png")
+           ppp = ImageTk.PhotoImage(file="art/icons/PPP" + str(SWACG.random_roll(1, 4)) + ".png")
            cv.create_image((self.l_lst[i][1][0]), (self.l_lst[i][1][1]), image=ppp)
            cv.create_text((self.l_lst[i][1][0]), (self.l_lst[i][1][1]) + 30,
                           text=self.l_lst[i][0]["name"], fill="white", tag="nil")
@@ -175,7 +171,6 @@ class SWACG_main:
         for widgets in viewport.winfo_children():
            widgets.destroy()
 
-
     def num_of_planets(self, players):
         """
         :param players: a int value 2,4,6,8 number of players
@@ -195,6 +190,10 @@ class SWACG_main:
         result = name.replace(" ", "")
         return result
 
+    def p_title(self,u_frame,u_text):
+        lbl_title=Label(u_frame,text=u_text,anchor=CENTER)
+        lbl_title.pack(side=TOP,padx=10,pady=10)
+
     def card_data(self):
         """
         :return: creates a frame per p_lst item and outputs the results to viewport in TAB2 in the UI
@@ -205,8 +204,10 @@ class SWACG_main:
         lbl_co_val = Label()
         lbl_sto_val = Label()
 
+        self.p_title(viewport,"planet List")
+
         for e in range(len(self.p_lst)):
-            card_frame = LabelFrame(viewport, text="planet Card")
+            card_frame = LabelFrame(viewport , text="planet Card")
             name_label = Label(card_frame, text=self.p_lst[e]["name"],width=self.w_val_sm,anchor=self.ap_w)
             vp_label = Label(card_frame, text="VP: " + str(self.p_lst[e]["vp"]),width=self.w_val_s)
 
@@ -243,7 +244,7 @@ class SWACG_main:
 
             self.dynamic_frames.append(card_frame)
 
-            card_frame.pack(side=TOP, fill=BOTH, expand=True,)
+            card_frame.pack(side=TOP, fill=BOTH, expand=True,padx=5,pady=5)
             name_label.grid(column=1, row=0)
             vp_label.grid(column=2, row=0)
 
@@ -269,26 +270,11 @@ class SWACG_main:
                 # write row of header names
                 for item in self.p_lst:
                     asset_writer.writerow([item])
-"""
-    def scroll_area(self):
-        # scrollable area (vertical)
-        scrollFrame = Frame(tab2)
-        scrollFrame.pack(fill=BOTH, expand=1)
 
-        scroll_canvas = Canvas(scrollFrame)
-        scroll_canvas.pack(side=LEFT, fill=BOTH, expand=True)
+        def save_img(self):
+            # myWin.after(250, lambda:save_as_png(cv,"texty"))
+            pass
 
-        scroll_bar = ttk.Scrollbar(scrollFrame, orient=VERTICAL, command=scroll_canvas.yview)
-        
-        scroll_bar.pack(side=RIGHT, fill=Y)
-
-        scroll_canvas.configure(yscrollcommand=scroll_bar.set, width=1200)
-        scroll_canvas.bind("<Configure>",
-                           lambda e: scroll_canvas.configure(scrollregion=scroll_canvas.bbox("all")))
-        # viewport frame
-        self.viewport = Frame(scroll_canvas, width=1200)
-        scroll_canvas.create_window((0, 0), window=self.viewport, anchor=NW)
-"""
 root = Tk()
 root.title("SWACG")
 root.iconbitmap("art/icon.ico")
@@ -434,7 +420,8 @@ lbl_fleet_fighters_val.grid(row=6, column=1)
 t3 = LabelFrame(menu_frame, text="Frame Three", height=250, width=280)
 
 #/map key area
-t4 = LabelFrame(menu_frame)
+
+t4 = LabelFrame(menu_frame,borderwidth=0,highlightthickness=0)
 t4_center_frame = Frame(t4)
 btn_generate = Button(t4_center_frame, text="generate", command=lambda: SWACG_assets.generate(),width=10)
 btn_coOrd_only = Button(t4_center_frame, text="remap", command=lambda: SWACG_assets.coord_regen(),width=10)
@@ -468,7 +455,7 @@ scrollFrame = Frame(tab2)
 scrollFrame.pack(fill=BOTH, expand=1)
 
 scroll_canvas = Canvas(scrollFrame)
-scroll_canvas.pack(side=LEFT, fill=BOTH, expand=True)
+scroll_canvas.pack(side=LEFT, fill=BOTH, expand=1)
 
 scroll_bar = ttk.Scrollbar(scrollFrame, orient=VERTICAL, command=scroll_canvas.yview)
 scroll_bar.pack(side=RIGHT, fill=Y)
@@ -477,7 +464,7 @@ scroll_canvas.configure(yscrollcommand=scroll_bar.set, width=1200)
 scroll_canvas.bind("<Configure>",
                    lambda e: scroll_canvas.configure(scrollregion=scroll_canvas.bbox("all")))
 # viewport frame
-viewport = Frame(scroll_canvas, width=1200)
+viewport = Frame(scroll_canvas)
 scroll_canvas.create_window((0, 0), window=viewport, anchor=NW)
 
 #/viewport frame
