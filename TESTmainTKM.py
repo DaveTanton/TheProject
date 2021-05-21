@@ -25,10 +25,16 @@ def on_map_change(event):
     cv.config(image=bg_img)# causes a traceback error but works?
     cv.place(x=0, y=0)
 
-def do_nothing():
-   filewin = Toplevel(root)
-   button = Button(filewin, text="Do nothing button")
-   button.pack()
+class bb :
+    def __init__(self):
+        pass
+    def do_nothing(self):
+        mroot = Tk()
+        mroot.title("SWACG")
+        mroot.geometry("100x100")
+        btn_close = Button(mroot, text="Close")
+        btn_close.pack()
+
 
 class SWACG_main:
 
@@ -65,7 +71,7 @@ class SWACG_main:
         campaign_details() justs outputs the details into the UI
         card_Data() outputs the planet data into TAB 2
         """
-        self.clear_viewport()
+        #self.clear_viewport()
         self.name = snb.get()
         self.players = r.get()
         self.planets = self.num_of_planets(self.players)
@@ -86,7 +92,7 @@ class SWACG_main:
         self.l_lst = SWACG.map_position(self.p_lst, self.planets)
         self.icons()
         self.campaign_details()
-        self.card_data()
+        self.scroll()
 
     def icons(self):
         """
@@ -156,7 +162,7 @@ class SWACG_main:
         """
         self.img_lst = []
         cv.delete(tag)
-        self.clear_viewport()
+        #self.clear_viewport()
         lbl_name_val.config(text=" ")
         lbl_players_val.config(text="0")
         lbl_planets_val.config(text="0")
@@ -165,12 +171,12 @@ class SWACG_main:
         lbl_fleet_ships_val.config(text="0")
         lbl_fleet_fighters_val.config(text="0")
 
-    def clear_viewport(self):
+   # def clear_viewport(self):
         """
         :return: clears all data in a frame
         """
-        for widgets in viewport.winfo_children():
-           widgets.destroy()
+       # for widgets in viewport.winfo_children():
+        #   widgets.destroy()
 
     def num_of_planets(self, players):
         """
@@ -199,7 +205,8 @@ class SWACG_main:
         """
         :return: creates a frame per p_lst item and outputs the results to viewport in TAB2 in the UI
         """
-        self.dynamic_frames =[]
+        #self.dynamic_frames =[]
+
         lbl_lr_val = Label()
         lbl_so_val = Label()
         lbl_co_val = Label()
@@ -243,7 +250,7 @@ class SWACG_main:
                     lbl_sto_val = Label(card_frame, text=asset,width=self.w_val_m,anchor=self.ap_w)
                     lbl_sto_val.grid(column=6, row=i + 1)
 
-            self.dynamic_frames.append(card_frame)
+            #self.dynamic_frames.append(card_frame)
 
             card_frame.pack(side=TOP, fill=BOTH, expand=True,padx=5,pady=5)
             name_label.grid(column=1, row=0)
@@ -253,6 +260,23 @@ class SWACG_main:
             lbl_so.grid(column=4, row=0)
             lbl_co.grid(column=5, row=0)
             lbl_sto.grid(column=6, row=0)
+
+    def scroll(self):
+        scrollFrame = Frame(tab2)
+        scrollFrame.pack(fill=BOTH, expand=1)
+
+        scroll_canvas = Canvas(scrollFrame)
+        scroll_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+        scroll_bar = ttk.Scrollbar(scrollFrame, orient=VERTICAL, command=scroll_canvas.yview)
+        scroll_bar.pack(side=RIGHT, fill=Y)
+
+        scroll_canvas.configure(yscrollcommand=scroll_bar.set, width=1200)
+        scroll_canvas.bind("<Configure>",
+                           lambda e: scroll_canvas.configure(scrollregion=scroll_canvas.bbox("all")))
+        self.viewport = Frame(scroll_canvas)
+        scroll_canvas.create_window((0, 0), window=self.viewport, anchor=NW)
+        self.card_data()
 
     def save_file(self):
         """
@@ -272,9 +296,11 @@ class SWACG_main:
                 for item in self.p_lst:
                     asset_writer.writerow([item])
 
-        def save_img(self):
-            # myWin.after(250, lambda:save_as_png(cv,"texty"))
-            pass
+    def save_img(self):
+        formats = [("Portable Network Graphics", "*.PNG")]
+        file_name = filedialog.asksaveasfilename(parent=root, filetypes=formats, defaultextension="*.*")
+        # myWin.after(250, lambda:save_as_png(cv,"texty"))
+        pass
 
 class VerticalScrolledFrame:
     """
@@ -356,16 +382,17 @@ main_frame = Frame(root)
 
 # menu bar
 menu_bar = Menu(root)
+hh=bb()
 
 file_menu = Menu(menu_bar, tearoff=0)
-file_menu.add_command(label="Open", command=do_nothing)
+file_menu.add_command(label="Open", command=lambda:hh.do_nothing())
 file_menu.add_command(label="Save Data", command=lambda: SWACG_assets.save_file())
-file_menu.add_command(label="Save Map", command=do_nothing)
+file_menu.add_command(label="Save Map", command=lambda:hh.do_nothing() )
 
 file_menu.add_separator()
 
-file_menu.add_command(label="About...", command=do_nothing)
-file_menu.add_command(label="Help Index", command=do_nothing)
+file_menu.add_command(label="About...", command =lambda:hh.do_nothing() )
+file_menu.add_command(label="Help Index", command=lambda:hh.do_nothing())
 
 file_menu.add_separator()
 
@@ -520,30 +547,6 @@ cv.place(x=0, y=0)
 
 #TAB2 START
 frame_tab_2 = Frame(main_frame)
-
-viewport = VerticalScrolledFrame(tab2,
-        width=300,
-        background="light gray")
-#viewport.grid(column=0, row=0, sticky='nsew') # fixed size
-viewport.pack(fill=tk.BOTH, expand=True) # fill window
-
-########## TEST TEST TEST ##########
-"""
-frame = VerticalScrolledFrame(root,
-        width=300,
-        borderwidth=2,
-        relief=tk.SUNKEN,
-        background="light gray")
-    #frame.grid(column=0, row=0, sticky='nsew') # fixed size
-    frame.pack(fill=tk.BOTH, expand=True) # fill window
-
-    for i in range(30):
-        label = tk.Label(frame, text="This is a label "+str(i))
-        label.grid(column=1, row=i, sticky=tk.W)
-
-        text = tk.Entry(frame, textvariable="text")
-        text.grid(column=2, row=i, sticky=tk.W)
-"""
 
 #/viewport frame
 #/TAB2 END
