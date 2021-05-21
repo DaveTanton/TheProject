@@ -205,10 +205,10 @@ class SWACG_main:
         lbl_co_val = Label()
         lbl_sto_val = Label()
 
-        self.p_title(viewport,"planet List")
+        self.p_title(self.viewport,"planet List")
 
         for e in range(len(self.p_lst)):
-            card_frame = LabelFrame(viewport , text="planet Card")
+            card_frame = LabelFrame(self.viewport , text="planet Card")
             name_label = Label(card_frame, text=self.p_lst[e]["name"],width=self.w_val_sm,anchor=self.ap_w)
             vp_label = Label(card_frame, text="VP: " + str(self.p_lst[e]["vp"]),width=self.w_val_s)
 
