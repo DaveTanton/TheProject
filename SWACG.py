@@ -35,8 +35,7 @@ def planetNames(regionNum,planets):
     if regionNum == 3:
         nameList = file_loader("midrim.txt")
     if regionNum == 4:
-        #correct file name
-        nameList = file_loader("coreworlds.txt")
+        nameList = file_loader("outerrim.txt")
 
     while count<=(planets)-1:
         name = nameList[random_roll(0, len(nameList) - 1)]
@@ -64,9 +63,9 @@ def file_loader(filename):
 def map_coord ():
     #posistions are placeholder based on a 100x300 grid fo the moment
     position =[]
-    xpos=random_roll(50,1000)
+    xpos=random_roll(2,25)
     position.append(xpos)
-    ypos=random_roll(50,700)
+    ypos=random_roll(2,18)
     position.append(ypos)
     return position
 
@@ -80,8 +79,8 @@ def map_position(planetList,planets):
             if coOrd in map_pos:
                 coOrd = map_coord()
             else:
-               # coOrd[0] = coOrd[0]*11
-               # coOrd[1] = coOrd[1]*10
+                coOrd[0] = coOrd[0]*40
+                coOrd[1] = coOrd[1]*40
                 map_pos.append(coOrd)
                 count+=1
 
@@ -185,3 +184,11 @@ def fleet_check(message):
         except:
             message = 'You must enter a valid number only : '
 
+def callback(input):
+    if input.isdigit():
+        return True
+
+    elif input is "":
+        return True
+    else:
+        return False
